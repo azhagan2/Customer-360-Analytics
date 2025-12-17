@@ -1,0 +1,15 @@
+
+
+To run entire pipeline + crawler:
+
+
+{
+  "runOnly": "full"
+}
+
+
+To run crawler:
+
+{
+  "runOnly": "crawler"
+}
