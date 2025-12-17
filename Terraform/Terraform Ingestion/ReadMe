@@ -1,0 +1,10 @@
+
+terraform init
+terraform plan -var-file="stage.tfvars"
+terraform apply -var-file="stage.tfvars"
+
+
+aws glue start-job-run --job-name rds-to-s3-job --profile stage
+aws glue start-job-run --job-name dynamodb-to-s3-job --profile stage
+
+aws glue start-crawler --name s3_customer_analytics_crawler --profile stage
