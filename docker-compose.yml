@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  airflow:
+    image: apache/airflow:2.9.1-python3.11
+    restart: always
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__PLUGINS_FOLDER=/opt/airflow/plugins
+    volumes:
+      - ./airflow:/opt/airflow
+      - ./airflow/requirements.txt:/requirements.txt
+      - /c/Users/Azhagan/.aws:/home/airflow/.aws  # If needed for other services
+    ports:
+      - "6080:8080"
+    command: >
+      bash -c "
+        pip install --no-cache-dir -r /requirements.txt &&
+        airflow db upgrade && airflow webserver & airflow scheduler"
+

@@ -1,0 +1,8 @@
+snowflake:
+  user: velmurugan
+  password: August202520252026
+  account: ZXUJXPR-ARB07887
+  warehouse: COMPUTE_WH
+  database: demo
+  schema: DEMO_SCHEMA
+  role: ACCOUNTADMIN

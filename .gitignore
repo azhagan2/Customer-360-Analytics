@@ -1,0 +1,16 @@
+# Airflow runtime
+airflow/logs/
+logs/
+airflow/airflow.db
+airflow/airflow-webserver.pid
+
+# Local configs & secrets
+airflow/airflow.cfg
+airflow/standalone_admin_password.txt
+
+# Python junk
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
