@@ -20,37 +20,45 @@ variable "glue_release_files" {}
 #########################
 # IAM Role for Glue
 #########################
-resource "aws_iam_role" "glue_role" {
+
+data "aws_iam_role" "glue_role" {
   name = var.glue_role
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Action = "sts:AssumeRole",
-      Effect = "Allow",
-      Principal = { Service = "glue.amazonaws.com" }
-    }]
-  })
+  
 }
 
-resource "aws_iam_role_policy_attachment" "glue_s3_access" {
-  role       = aws_iam_role.glue_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
 
-resource "aws_iam_role_policy_attachment" "glue_service_role" {
-  role       = aws_iam_role.glue_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
-}
 
-resource "aws_iam_role_policy_attachment" "glue_console_access" {
-  role       = aws_iam_role.glue_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"
-}
-resource "aws_iam_role_policy_attachment" "glue_cloudwatch_logs" {
-  role       = aws_iam_role.glue_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonCloudWatchEvidentlyFullAccess"
-}
+# resource "aws_iam_role" "glue_role" {
+#   name = var.glue_role
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [{
+#       Action = "sts:AssumeRole",
+#       Effect = "Allow",
+#       Principal = { Service = "glue.amazonaws.com" }
+#     }]
+#   })
+# }
+
+# resource "aws_iam_role_policy_attachment" "glue_s3_access" {
+#   role       = aws_iam_role.glue_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+# }
+
+# resource "aws_iam_role_policy_attachment" "glue_service_role" {
+#   role       = aws_iam_role.glue_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+# }
+
+# resource "aws_iam_role_policy_attachment" "glue_console_access" {
+#   role       = aws_iam_role.glue_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"
+# }
+# resource "aws_iam_role_policy_attachment" "glue_cloudwatch_logs" {
+#   role       = aws_iam_role.glue_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonCloudWatchEvidentlyFullAccess"
+# }
 
 
 
@@ -72,7 +80,7 @@ resource "aws_glue_job" "jobs" {
   for_each = local.glue_jobs
 
   name     = each.key
-  role_arn = aws_iam_role.glue_role.arn
+  role_arn = data.aws_iam_role.glue_role.arn
 
   command {
     name            = "glueetl"
@@ -105,7 +113,7 @@ resource "aws_glue_job" "jobs" {
 #########################
 resource "aws_glue_crawler" "crawler" {
   name          = "customer360_crawler"
-  role          = aws_iam_role.glue_role.arn
+  role          = data.aws_iam_role.glue_role.arn
   database_name = var.glue_output_database_name
 
   # Crawl Gold Layer
@@ -127,47 +135,47 @@ resource "aws_glue_crawler" "crawler" {
 
 
 
-resource "aws_iam_role" "step_function_role" {
-  name = "StepFunctionsGlueOrchestrationRole"
+# resource "aws_iam_role" "step_function_role" {
+#   name = "StepFunctionsGlueOrchestrationRole"
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Principal = {
-          Service = "states.amazonaws.com"
-        },
-        Action = "sts:AssumeRole"
-      }
-    ]
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect = "Allow",
+#         Principal = {
+#           Service = "states.amazonaws.com"
+#         },
+#         Action = "sts:AssumeRole"
+#       }
+#     ]
+#   })
+# }
 
-resource "aws_iam_role_policy" "step_function_policy" {
-  name = "stepfunction-glue-access"
-  role = aws_iam_role.step_function_role.id
+# resource "aws_iam_role_policy" "step_function_policy" {
+#   name = "stepfunction-glue-access"
+#   role = aws_iam_role.step_function_role.id
 
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Effect = "Allow",
-        Action = [
-          "glue:StartJobRun",
-          "glue:GetJobRun",
-          "glue:StartCrawler",
-          "glue:GetCrawler"
-        ],
-        Resource = "*"
-      }
-    ]
-  })
-}
+#   policy = jsonencode({
+#     Version = "2012-10-17",
+#     Statement = [
+#       {
+#         Effect = "Allow",
+#         Action = [
+#           "glue:StartJobRun",
+#           "glue:GetJobRun",
+#           "glue:StartCrawler",
+#           "glue:GetCrawler"
+#         ],
+#         Resource = "*"
+#       }
+#     ]
+#   })
+# }
 
 
-resource "aws_sfn_state_machine" "glue_orchestration" {
-  name     = "GlueETLOrchestration"
-  role_arn = aws_iam_role.step_function_role.arn
-  definition = file("${path.module}/glue_step_function.json")
-}
+# resource "aws_sfn_state_machine" "glue_orchestration" {
+#   name     = "GlueETLOrchestration"
+#   role_arn = aws_iam_role.step_function_role.arn
+#   definition = file("${path.module}/glue_step_function.json")
+# }
