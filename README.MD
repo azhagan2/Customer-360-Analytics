@@ -25,7 +25,7 @@ The core goal of this project is to:
 **Data Flow Overview**
 RDS (VPC) / DynamoDB → Terraform Ingestion → S3 Bronze → Glue ETL → S3 Silver → S3 Gold → Athena → BI Tools
 
-![Architecture](Project_1_customer_analytics.png)
+![Architecture](customeranalyticssvg.svg)
 
 ---
 
