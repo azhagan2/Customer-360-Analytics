@@ -1,31 +1,15 @@
-# 🚀 AWS Medallion Data Engineering Pipeline (Terraform + Glue + Airflow)
+# 🚀 AWS Medallion Data Engineering Pipeline
+*(Terraform + Glue + Airflow)*
 
-This repository implements an **end-to-end cloud-native data engineering platform** designed to **extract, transform, and store data for analytics and BI consumption** using AWS services and infrastructure-as-code.
+This repository implements an **end-to-end cloud-native data engineering platform** designed to **extract, transform, and store data for analytics and BI consumption** using AWS services and Infrastructure as Code (IaC).
 
 The solution follows the **Medallion Architecture (Bronze → Silver → Gold)** and is fully automated, reproducible, and environment-agnostic.
-
----
-
-## Table of contents
-
-- [Project Objective](#-project-objective)
-- [High-Level Architecture](#-high-level-architecture)
-- [Medallion Architecture](#-medallion-architecture)
-- [Tech Stack & Services](#️-tech-stack--services)
-- [Infrastructure as Code (Terraform)](#-infrastructure-as-code-terraform)
-  - [Ingestion (Bronze Layer)](#1️⃣-ingestion-bronze-layer)
-  - [Transformation (Silver & Gold)](#2️⃣-transformation-silver--gold)
-- [ETL & CI/CD Workflow](#-etl--cicd-workflow)
-- [Analytics & BI Consumption](#-analytics--bi-consumption)
-- [Key Benefits](#-key-benefits)
-- [License](#-license)
 
 ---
 
 ## 🎯 Project Objective
 
 The core goal of this project is to:
-
 - Extract data from **RDS (inside VPC)** and **DynamoDB**
 - Land raw data into **Amazon S3 (Bronze layer)**
 - Transform data using **AWS Glue ETL (PySpark)**
@@ -39,34 +23,31 @@ The core goal of this project is to:
 ## 🏗️ High-Level Architecture
 
 **Data Flow Overview**
-
 RDS (VPC) / DynamoDB → Terraform Ingestion → S3 Bronze → Glue ETL → S3 Silver → S3 Gold → Athena → BI Tools
 
 ---
 
 ## 🧱 Medallion Architecture
 
-| Layer    | Purpose                                    |
-|----------|--------------------------------------------|
-| Bronze   | Raw ingested data from RDS & DynamoDB      |
-| Silver   | Cleaned, standardized, business-ready data |
-| Gold     | Aggregated, analytics-optimized datasets   |
+| Layer | Purpose |
+|------|--------|
+| **Bronze** | Raw ingested data from RDS & DynamoDB |
+| **Silver** | Cleaned, standardized, business-ready data |
+| **Gold** | Aggregated, analytics-optimized datasets |
 
 ---
 
 ## 🛠️ Tech Stack & Services
 
-| Category        | Service         | Description                                 |
-|-----------------|-----------------|---------------------------------------------|
-| IaC             | Terraform       | Infrastructure provisioning across environments |
-| ETL             | AWS Glue        | Serverless ETL for Bronze → Silver → Gold   |
-| Compute         | AWS Lambda      | Lightweight validation & triggers           |
-| Orchestration   | Apache Airflow  | DAG-based orchestration & dependency control|
-| Storage         | Amazon S3       | Data Lake for all medallion layers          |
-| Governance      | Lake Formation  | Fine-grained data access control            |
-| Analytics       | Amazon Athena   | SQL analytics on S3                         |
-
-(Logo images removed for cleaner README in plain markdown; you can add badges or logos back if desired.)
+| Category | Service | Logo | Description |
+|-------|--------|:------:|------------|
+| **IaC** | **Terraform** | <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Terraform_Logo.svg" width="35"/> | Infrastructure provisioning across environments |
+| **ETL** | **AWS Glue** | <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/AWS_Glue.png" width="35"/> | Serverless ETL for Bronze → Silver → Gold |
+| **Compute** | **AWS Lambda** | <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Orange_lambda.svg" width="30"/> | Lightweight validation & triggers |
+| **Orchestration** | **Apache Airflow** | <img src="https://airflow.apache.org/images/feature-image.png" width="60"/> | DAG-based orchestration & dependency control |
+| **Storage** | **Amazon S3** | <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Amazon-S3-Logo.svg" width="35"/> | Data Lake for all medallion layers |
+| **Governance** | **Lake Formation** | <img src="https://icon.icepanel.io/AWS/svg/Analytics/Lake-Formation.svg" width="35"/> | Fine-grained data access control |
+| **Analytics** | **Amazon Athena** | <img src="https://icon.icepanel.io/AWS/svg/Analytics/Athena.svg" width="35"/> | SQL analytics on S3 |
 
 ---
 
@@ -110,5 +91,4 @@ Creates: Glue Jobs, Crawlers, and Job parameters. Terraform **reduces manual eff
 ---
 
 ## 📄 License
-
 MIT License
