@@ -41,7 +41,7 @@ RDS (VPC) / DynamoDB → Terraform Ingestion → S3 Bronze → Glue ETL → S3 S
 
 | Category | Service | Logo | Description |
 |-------|--------|:------:|------------|
-| **IaC** | **Terraform** | <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Terraform_Logo.svg" width="40" height="40"/> | Infrastructure provisioning across environments |
+| **IaC** | **Terraform** | <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Terraform_Logo.svg" width="90" height="90"/> | Infrastructure provisioning across environments |
 | **ETL** | **AWS Glue** | <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/AWS_Glue.png" width="35"/> | Serverless ETL for Bronze → Silver → Gold |
 | **Compute** | **AWS Lambda** | <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Orange_lambda.svg" width="30"/> | Lightweight validation & triggers |
 | **Orchestration** | **Apache Airflow** | <img src="https://airflow.apache.org/images/feature-image.png" width="60"/> | DAG-based orchestration & dependency control |
