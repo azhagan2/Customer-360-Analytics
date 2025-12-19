@@ -1,4 +1,175 @@
-Execu 
----------------
+# 🚀 AWS Medallion Data Engineering Pipeline  
+*(Terraform + Glue + Airflow)*
 
-python init_connections.py
+This repository implements an **end-to-end cloud-native data engineering platform** designed to **extract, transform, and store data for analytics and BI consumption** using AWS services and Infrastructure as Code (IaC).
+
+The solution follows the **Medallion Architecture (Bronze → Silver → Gold)** and is fully automated, reproducible, and environment-agnostic.
+
+---
+
+## 🎯 Project Objective
+
+The core goal of this project is to:
+
+- Extract data from **RDS (inside VPC)** and **DynamoDB**
+- Land raw data into **Amazon S3 (Bronze layer)**
+- Transform data using **AWS Glue ETL (PySpark)**
+- Promote curated datasets to **Silver & Gold layers**
+- Orchestrate pipelines using **Apache Airflow**
+- Manage infrastructure using **Terraform**
+- Enable **secure BI access** via Athena + ODBC + Lake Formation
+
+This platform enables **reliable analytics, governed access, and faster decision-making** for stakeholders.
+
+---
+
+## 🏗️ High-Level Architecture
+
+**Data Flow Overview**
+
+RDS (VPC) / DynamoDB
+↓
+Terraform Ingestion (VPC Endpoint, Glue Connection)
+↓
+S3 Bronze + Glue Catalog (Crawler)
+↓
+Glue ETL (PySpark)
+↓
+S3 Silver → S3 Gold
+↓
+Athena + ODBC
+↓
+Power BI / Redash / Metabase
+
+
+
+---
+
+## 🧱 Medallion Architecture
+
+| Layer | Purpose |
+|------|--------|
+| **Bronze** | Raw ingested data from RDS & DynamoDB |
+| **Silver** | Cleaned, standardized, business-ready data |
+| **Gold** | Aggregated, analytics-optimized datasets |
+
+---
+
+## 🛠️ Tech Stack & Services
+
+| Category | Service | Logo | Description |
+|-------|--------|------|------------|
+| **IaC** | **Terraform** | <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Terraform_Logo.svg" width="40"/> | Infrastructure provisioning across environments |
+| **Compute & ETL** | **AWS Glue** | <img src="https://upload.wikimedia.org/wikipedia/commons/1/11/AWS_Glue.png" width="40"/> | Serverless ETL for Bronze → Silver → Gold |
+| | **AWS Lambda** | <img src="https://upload.wikimedia.org/wikipedia/commons/8/8f/Orange_lambda.svg" width="40"/> | Lightweight validation & triggers |
+| **Orchestration** | **Apache Airflow** | <img src="https://airflow.apache.org/images/feature-image.png" width="40"/> | DAG-based orchestration & dependency control |
+| **Storage** | **Amazon S3** | <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Amazon-S3-Logo.svg" width="40"/> | Data Lake for all medallion layers |
+| **Catalog & Governance** | **AWS Glue Catalog** | <img src="https://icon.icepanel.io/AWS/svg/Analytics/Glue.svg" width="40"/> | Central metadata management |
+| | **AWS Lake Formation** | <img src="https://icon.icepanel.io/AWS/svg/Analytics/Lake-Formation.svg" width="40"/> | Fine-grained data access control |
+| **Networking** | **VPC Endpoint** | <img src="https://icon.icepanel.io/AWS/svg/Networking-Content-Delivery/VPC.svg" width="40"/> | Secure private connectivity to RDS |
+| **CI / CD** | **GitHub Actions** | <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="40"/> | Automated ETL artifact deployment |
+| **Analytics** | **Amazon Athena** | <img src="https://icon.icepanel.io/AWS/svg/Analytics/Athena.svg" width="40"/> | SQL analytics on S3 |
+| **BI & Reporting** | **Power BI / Redash / Metabase** | 📊 | Business dashboards & insights |
+| **Monitoring** | **CloudWatch** | <img src="https://icon.icepanel.io/AWS/svg/Management-Governance/CloudWatch.svg" width="40"/> | Logs, metrics & job monitoring |
+
+---
+
+## ⚙️ Infrastructure as Code (Terraform)
+
+### 1️⃣ Ingestion Terraform (Bronze Layer)
+
+Responsible for **secure data extraction from RDS inside VPC**.
+
+Creates:
+- VPC Endpoints
+- Glue Connections (JDBC)
+- Glue Crawlers
+- IAM Roles & Policies
+- S3 Bronze folders
+- Glue Catalog tables
+
+Ensures **private and secure ingestion without public exposure**.
+
+---
+
+### 2️⃣ Transformation Terraform (Silver & Gold)
+
+Used to deploy **Glue ETL pipelines across environments**.
+
+Creates:
+- Glue Jobs
+- Glue Crawlers (Silver & Gold)
+- Job parameters (input/output paths)
+- IAM roles
+- Environment-specific configs (`dev / stage / uat / prod`)
+
+Terraform **reduces manual effort and deployment errors**.
+
+---
+
+## 🔄 ETL & CI/CD Workflow
+
+- ETL code written in **PySpark**
+- Packaged as a **Python Wheel (.whl)**  
+- Stored in **S3**
+- **GitHub Actions**:
+  - Triggered on code push
+  - Builds wheel
+  - Uploads latest artifact to S3
+
+This ensures **immutable, version-controlled ETL code** in Glue.
+
+---
+
+## 🧠 Orchestration & Monitoring
+
+- **Apache Airflow** orchestrates:
+  - Ingestion
+  - Transformations
+  - Dependencies
+- **CloudWatch** monitors:
+  - Glue job logs
+  - Failures
+  - Execution metrics
+
+---
+
+## 📊 Analytics & BI Consumption
+
+- Data queried using **Amazon Athena**
+- Connected via **ODBC**
+- Visualized in:
+  - Power BI
+  - Redash
+  - Metabase
+- **Lake Formation** governs:
+  - Table-level access
+  - Column-level permissions
+
+---
+
+## ✅ Key Benefits
+
+- Fully automated data pipelines
+- Secure VPC-based ingestion
+- Scalable Medallion Architecture
+- Reusable Terraform modules
+- Faster environment provisioning
+- Business-ready analytics
+- Strong governance & access control
+
+---
+
+## 📌 Use Cases
+
+- Enterprise analytics
+- BI reporting
+- Data engineering reference architecture
+- Interview-ready real-world project
+- Production-grade AWS data platform
+
+---
+
+## 📄 License
+
+MIT License
